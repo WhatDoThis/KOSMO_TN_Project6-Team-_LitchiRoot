@@ -131,7 +131,7 @@
     height: 100%;
     background-color: #F88b74;
     border: none;
-    color:#F54927;
+    color:#fff;
     font-size: 1.5rem;
     outline:none;
     cursor: pointer;
@@ -140,7 +140,7 @@
 }
 
 .signup-join .signup-btn:hover{
-    color: #fff;
+    color: #F88b74;
     background-color: #F54927;
 }
 
@@ -246,7 +246,7 @@
     border: none;
     border-radius: 20px;
     font-size: 1.5rem;
-    color: #F54927;
+    color: #fff;
     background-color: #F88b74;
     margin-right: 10px;
     font-family: noto-bold;
@@ -264,7 +264,7 @@
     border-radius: 20px;
     cursor: pointer;
     font-size: 1.5rem;
-    color: #F54927;
+    color: #fff;
     background-color: #F88b74;
     font-family: noto-bold;
 }

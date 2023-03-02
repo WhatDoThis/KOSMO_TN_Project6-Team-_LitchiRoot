@@ -102,63 +102,70 @@ def logout(request):
    return HttpResponse("<script>alert('"+ message +"');location.href='"+url+"';</script>")
 
 def list(request):
-    templates = loader.get_template('list.html')
-    request.session['url'] = request.path
-    sector_set = set()
-    recruitments = Recruitment.objects.select_related('re_affiliate').order_by('re_edate')
-    companies = Company.objects.all().values()
-    if recruitments:
-        for recruitment in recruitments:
-            sector_set.add(recruitment.re_sector)
-            recruitment.dDay = (recruitment.re_edate-datetime.now().date()).days
+   templates = loader.get_template('list.html')
+   request.session['url'] = request.path
+   # 직무 리스트는 여러번 불러와지면 안되므로 따로 담아줄 그릇이 필요함 => sector_set
+   sector_set = set()
+   recruitments = Recruitment.objects.select_related('re_affiliate').order_by('re_edate')
+   companies = Company.objects.all().values()
+   # 각 공고별 직무 리스트들을 set에 담아 중복을 제거하고 디데이 요소를 추가하여 넣어줌
+   if recruitments:
+      for recruitment in recruitments:
+         sector_set.add(recruitment.re_sector)
+         recruitment.dDay = (recruitment.re_edate-datetime.now().date()).days
     
-    context = {
-        'recruitments' : recruitments,
-        'companies' : companies,
-        'sector_set' : sector_set,
-    }
-            
-    if request.method == 'POST':
-        company_option = request.POST.get('company')
-        sector_option = request.POST.get('sector')
-        career_option = request.POST.get('career')
-        
-        q = Q()
-        if company_option != "primary":
-            q &= Q(re_affiliate = company_option)
-        if sector_option != "primary":
-            q &= Q(re_sector=sector_option)
-        if career_option != "primary":
-            q &= Q(re_career__contains=career_option)
-        recruitments = Recruitment.objects.select_related('re_affiliate').filter(q).order_by('re_edate')
-        for recruitment in recruitments:
-            recruitment.dDay = (recruitment.re_edate-datetime.now().date()).days
-        
-        context = {
-            'recruitments' : recruitments,
-            'companies' : companies,
-            'sector_set' : sector_set,
-            'company_option' : company_option,
-            'sector_option' : sector_option,
-            'career_option' : career_option,
-        }
-    
-    return HttpResponse(templates.render(context, request))
+   context = {
+      'recruitments' : recruitments,
+      'companies' : companies,
+      'sector_set' : sector_set,
+   }
+   
+   # Search 를 통하여 POST 가 존재하게 되면 리스트를 검색한 내용에 맞게 새로 보여줌
+   if request.method == 'POST':
+      company_option = request.POST.get('company')
+      sector_option = request.POST.get('sector')
+      career_option = request.POST.get('career')
+      
+      # 검색 요소가 3개일 때 각 요소에 대한 필터내용을 유기적으로 연동될 수 있는 방법
+      q = Q()
+      if company_option != "primary":
+         q &= Q(re_affiliate = company_option)
+      if sector_option != "primary":
+         q &= Q(re_sector=sector_option)
+      if career_option != "primary":
+         q &= Q(re_career__contains=career_option)
+      recruitments = Recruitment.objects.select_related('re_affiliate').filter(q).order_by('re_edate')
+      for recruitment in recruitments:
+         recruitment.dDay = (recruitment.re_edate-datetime.now().date()).days
+
+      context = {
+         'recruitments' : recruitments,
+         'companies' : companies,
+         'sector_set' : sector_set,
+         'company_option' : company_option,
+         'sector_option' : sector_option,
+         'career_option' : career_option,
+      }
+
+   return HttpResponse(templates.render(context, request))
 
 
 def search(request):
-    if request.method == 'POST':
-        ajax_data = request.POST['get_data']
-        if ajax_data.isdigit():
-            data_for_jasons = Recruitment.objects.select_related('re_affiliate').filter(Q(re_affiliate=ajax_data))
-        else:
-            data_for_jasons = Recruitment.objects.select_related('re_affiliate').filter(Q(re_sector=ajax_data))
+   if request.method == 'POST':
+      ajax_data = request.POST['get_data']
+      # 받은 데이터 값이 숫자라면 (회사.id)이므로 해당 회사의 직무들을 찾아서 가져옴
+      if ajax_data.isdigit():
+         data_for_jasons = Recruitment.objects.select_related('re_affiliate').filter(Q(re_affiliate=ajax_data))
+      # 받은 데이터 값이 글자라면 (직무value)이므로 해당 직무를 가진 회사들을 찾아서 가져옴
+      else:
+         data_for_jasons = Recruitment.objects.select_related('re_affiliate').filter(Q(re_sector=ajax_data))
 
-        report_list = serializers.serialize('json', data_for_jasons)
-        return JsonResponse(report_list, safe=False)
-    else:
-        message = '알 수 없는 오류가 발행하였습니다.'
-        return HttpResponse("<script>alert('"+ message +"');history.back()</script>")
+      # ajax로 보낼때 쿼리셋의 경우 직렬화가 필요함
+      report_list = serializers.serialize('json', data_for_jasons)
+      return JsonResponse(report_list, safe=False)
+   else:
+      message = '알 수 없는 오류가 발행하였습니다.'
+      return HttpResponse("<script>alert('"+ message +"');history.back()</script>")
     
 #입사지원 상세화면
 def apply(request, company, recruitment):

@@ -116,7 +116,9 @@
 			if (!this.classList.contains('selected')) {
 				this.parentNode.querySelector('.custom-option-company.selected').classList.remove('selected');
 				this.classList.add('selected');
-				document.querySelector('.mustDelete').remove();
+				if(document.querySelector('.mustDelete') != null){
+					document.querySelector('.mustDelete').remove();
+				}
 				document.getElementById('company').value=this.textContent;
 				this.closest('.select-company').querySelector('.select__trigger-company span').textContent = this.textContent;
 				let spanNode = document.createElement("span");
