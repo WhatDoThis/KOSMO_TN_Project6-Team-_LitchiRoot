@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tropical Night Litchi-Root</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/list.css' %}">
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="{% static '/js/bootstrap.js' %}"></script>
+    <script src="{% static '/js/trim.js'%}"></script>
+	<script language="javascript">
+		function check_apply(co, co_no, re_no){
+			var is_apply = confirm('[ ' + co + ' ] 사로 지원하시겠습니까?');
+            if(is_apply){
+                location.href="../apply/"+co_no+"/"+re_no;
+                return true;
+            }
+            return false;
+		}
+	</script>
+</head>
+
+{% include "nav.html" %}
+<body style="margin:0">
+    <div class="list-main">
+        <div class="list-title">
+            <p>모집공고</p>
+            <span>당신의 도전이 새로운 미래를 만듭니다.</span>
+        </div>
+        <div class="col-lt">
+            {% if recruitments %}
+            {% for recruitment in recruitments %}
+            {% if forloop.last %}
+            <span> {{forloop.counter}} 개의 모집공고가 있습니다.</span>
+            {% endif %}
+            {% endfor %}
+            {% else %}
+            <span> 0 개의 모집공고가 있습니다.</span>
+            {% endif %}
+            {% include "search.html" %}
+        </div>
+        <div class="col-rt">
+            <ul class="accordion" id="accordionExample">
+                <li class="accordion-item">
+                    <h2 class="accordion-item accordion-header" id="headingone"></h2>
+                    <div id="collapseone" class="accordion-collapse collapse show" aria-labelledby="headingone" data-bs-parent="#accordionExample">
+                        <div class="accordion-body"></div>
+                    </div>
+                </li>
+                {% if recruitments %}
+                    {% for recruitment in recruitments %}
+                    <li class="accordion-item">
+                        <h2 class="accordion-item accordion-header" id="heading{{recruitment.id}}">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{recruitment.id}}" aria-expanded="false" aria-controls="collapse{{recruitment.id}}">
+                                <strong class="code-head-strong">{{recruitment.re_affiliate.co_affiliate}}</strong>
+                                <div class="code-head-div">{{recruitment.re_sector}}</div>
+                                <span class="code-head-span">D-{{recruitment.dDay}}</span>
+                                <div class="arrow"></div>
+                            </button>
+                        </h2>
+                        <div id="collapse{{recruitment.id}}" class="accordion-collapse collapse" aria-labelledby="heading{{recruitment.id}}" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <strong>{{recruitment.re_career}}</strong><br><br>
+                                <code>{{recruitment.re_prefer}}</code><br><br>
+                                {{recruitment.re_sdate|date:'Y. m. d'}} ~ {{recruitment.re_edate|date:'Y. m. d'}}<br><br>
+                                <button style="display:block-inline" onclick="check_apply('{{recruitment.re_affiliate.co_affiliate}}', '{{recruitment.re_affiliate_id}}', '{{recruitment.id}}')">지원하기</button><br><br>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                {% else %}
+                <li class="accordion-item2">
+                    <div class="no-re">
+                        <span>검색된 공고가 없습니다.</span>
+                    </div>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>            
+</body>
+{% include "footer.html" %}
+</html>

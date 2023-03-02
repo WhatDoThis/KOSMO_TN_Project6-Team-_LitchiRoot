@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tropical Night Litchi-Root</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}">
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function onchange_fun(no){
+            var companyId = document.getElementById("company");
+            var sectorId = document.getElementById("sector");
+            var item_company = companyId.options[companyId.selectedIndex].value;
+            var item_sector = sectorId.options[sectorId.selectedIndex].value;
+            
+            if(no==1){
+                if(item_company == "primary"){
+                    onreset_fun()
+                }else{
+                    check_ajax(".field1-sel", "#company", ".field2-sel", ".field2-s", "직무")
+                }
+            }else if(no==2){
+                if(item_sector == "primary"){
+                    onreset_fun()
+                }else{
+                    check_ajax(".field2-sel", "#sector", ".field1-sel", ".field1-s", "회사")
+                }
+            }
+        }
+
+        function check_ajax(basic, basic_sharp, change, selec, val){
+            get_data = $(basic_sharp).val();
+            $.ajax({
+                type:'post',
+                url:'../search/',
+                headers:{
+                'X-CSRFTOKEN' : '{{csrf_token}}'
+                },
+                data:{
+                    'get_data' : get_data,
+                },
+                success:function(json){
+                    const boxes = document.querySelectorAll(change);
+                    boxes.forEach(box => {
+                        box.style.display="none";
+                    });
+                    json_data = JSON.parse(json)
+                    if(basic == ".field1-sel"){
+                        for (var i=0; i<json_data.length; i++){
+                            
+                            let changeStyle = document.querySelectorAll(change);
+                            changeStyle.forEach((userItem) => {
+                                value = userItem.getAttribute("value")
+                                if(value == json_data[i].fields.re_sector || value == "primary"){
+                                    userItem.style.display="block";
+                                }
+                            });
+                        }
+                    }else if(basic == ".field2-sel"){
+                        for (var i=0; i<json_data.length; i++){
+                            
+                            let changeStyle = document.querySelectorAll(change);
+                            changeStyle.forEach((userItem) => {
+                                value = userItem.getAttribute("value")
+                                if(value == json_data[i].fields.re_affiliate || value == "primary"){
+                                    userItem.style.display="block";
+                                }
+                            });
+                        }
+                    }
+                },
+                error : function(xhr,errmsg,err) {
+                    alert("실패");
+                console.log(xhr.status + ": " + xhr.responseText); 
+                }
+            });
+        }
+        
+        function onreset_fun(){
+            let changeStyle1 = document.querySelectorAll(".field1-sel");
+                changeStyle1.forEach((userItem) => {
+                if(userItem.style.display == "none"){
+                    userItem.style.display = "block";
+                }
+            });
+            let changeStyle2 = document.querySelectorAll(".field2-sel");
+                changeStyle2.forEach((userItem) => {
+                if(userItem.style.display == "none"){
+                    userItem.style.display = "block";
+                }
+            });
+            $('#company').val("primary");
+            $('#sector').val("primary");
+            $('#career').val("primary");
+        }
+    </script>
+</head>
+
+<div class="jobs_search_box">
+    <strong>관심 있는 공고를<br> 편리하게 찾아보세요.</strong>
+    <div class="jobs_search_field">
+        <form name="f" action="/list/" method="post">
+        {% csrf_token %}
+            <div class="field1">
+                <select class="field1-s" name="company" id="company" title="관계사 선택" onchange="onchange_fun(1)">
+                    <option class="field1-sel" value="primary" selected>회사</option>
+                    {% if companies %}
+                    {% for company in companies %}
+                    <option class="field1-sel" value="{{company.id}}">{{company.co_affiliate}}</option>
+                    {% endfor %}
+                    {% endif %}
+                </select>
+            </div>
+            <div class="field2">
+                <select class="field2-s" name="sector" id="sector" title="관계사 선택" onchange="onchange_fun(2)">
+                    <option class="field2-sel" value="primary" selected>직무</option>
+                    {% if sector_set %}
+                    {% for sector_get in sector_set %}
+                    <option class="field2-sel" value="{{sector_get}}">{{sector_get}}</option>
+                    {% endfor %}
+                    {% endif %}
+                </select>
+            </div>
+            <div class="field3">
+                <select class="field3-s" name="career" id="career" title="영입유형 선택">
+                    <option class="field3-sel selected" value="primary">영입유형</option>
+                    <option value="신입">신입</option>
+                    <option value="경력">경력</option>
+                </select>
+            </div>
+            <button class="search-btn" type="submit" id="search" title="검색하기">검색</button>
+        </form>
+    </div>
+    <button class="reset-btn" onclick="onreset_fun()" title="검색조건 초기화">검색조건 초기화<!--검색조건 초기화--></button>
+</div>
+
+{% if company_option %}
+<script>
+    var company_option = '{{company_option}}';
+    $('#company').val(company_option);
+    if(company_option !="primary"){
+        check_ajax(".field1-sel", "#company", ".field2-sel", ".field2-s", "직무")
+    }
+</script>
+{% endif %}
+{% if sector_option %}
+<script>
+    var sector_option = '{{sector_option}}';
+    $('#sector').val(sector_option);
+</script>
+{% endif %}
+{% if career_option %}
+<script>
+    var career_option = '{{career_option}}';
+    $('#career').val(career_option);
+</script>
+{% endif %}
+
+<script>
+    $(document).ready(function () {
+        stickyjobsSearch(); //sticky job search box
+    });
+
+    $(window).resize(function () {
+        if (this.resizeTO) {
+            clearTimeout(this.resizeTO);
+        }
+        this.resizeTO = setTimeout(function () {
+            $(this).trigger('resizeEnd');
+        }, 0);
+    });
+
+    $(window).on('resizeEnd', function () {
+        stickyjobsSearch();
+    });
+
+    function stickyjobsSearch() {
+        var windowW = $(window).width();
+        if ($('.jobs_search_box').length > 0) {
+            if (windowW > 900) {
+                $(window).scroll(function () {
+                    var windowST = $(window).scrollTop();
+                    var windowSclHt = windowST + $(window).height();
+                    var ftTop = $('.footer-main').offset().top + 125;
+                    var jobslistTop = $('.accordion').offset().top - 300;
+
+                    if (windowSclHt > jobslistTop) {
+                        $('.jobs_search_box').addClass('sticky');
+                    }
+                    if (windowST < jobslistTop || windowSclHt > ftTop) {
+                        $('.jobs_search_box').removeClass('sticky');
+                    }
+                });
+            } else {
+                $(window).scroll(function () {
+                    $('.jobs_search_box').removeClass('sticky');
+                });
+            }
+        }
+    }
+</script>

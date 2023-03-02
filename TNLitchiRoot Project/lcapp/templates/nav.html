@@ -1,0 +1,47 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/nav.css'%}" />
+
+<nav class="nav-main">
+  <header class="nav-header" id="header">
+    <h1 class="nav-header-heading">
+      <a href="{% url 'index' %}" title="메인 화면"><img src="{% static 'css/imgs/logo.png'%}" class="nav-image"></a>
+    </h1>
+    <div class="nav-sign">
+      <ul class="nav-sign nav-sign-list">
+        {% if request.session.email %}
+        <button onclick="location.href='{% url "logout" %}'">LOGOUT</button>
+        <button onclick="location.href='{% url "info" %}'">INFO</button >
+        {% else %}
+        <button id="login_button">LOGIN</button>
+        <button onclick="location.href='{% url "join" %}'">SIGN UP</button >
+        {% endif %}
+        {%include 'login.html'%}
+      </ul>
+    </div>
+  </header>
+  <ul class="nav-menu">
+    <li class="nav-menu-item">
+      <a href="{% url 'introduce' %}" class="menu-heading">LITCHI ROOT</a>
+    </li>
+    <li class="nav-menu-item">
+      <a href="{% url 'list' %}" class="menu-heading">모집공고</a>
+    </li>
+    <li class="nav-menu-item">
+        <a href="{% url 'apply' '0' '0' %}" class="menu-heading">입사지원</a>
+      </li>
+    <li class="nav-menu-item">
+      <a href="{% url 'myPage' %}" class="menu-heading">지원목록</a>
+    </li>
+    <li class="nav-menu-item">
+      <a href="{% url 'ask' %}" class="menu-heading">1:1문의</a>
+    </li>
+  </ul>
+</nav>
+
+{% if messages %}
+{% for message in messages %}
+<script>
+  alert('{{message}}');
+</script>
+{% endfor %}
+{% endif %}

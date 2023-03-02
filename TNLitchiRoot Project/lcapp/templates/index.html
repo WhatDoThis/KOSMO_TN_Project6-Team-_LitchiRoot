@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tropical Night Litchi-Root</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css'%}" />
+</head>
+{% include "nav.html" %}
+<body style="margin:0">
+  <main class="index-main">
+    <div class="index-title">
+      <p>
+        TROPICAL
+        <span>NIGHT.</span>
+        LITCHI
+        <span>ROOT.</span>
+      </p>
+      <video class="index-video" src="{% static 'css/imgs/video.mp4' %}" muted autoplay loop></video>
+    </div>
+    <figcaption class="index-detail">
+      <span>세상에 없는 기술과</span>
+      <span>새로운 세계를 &nbsp; 향한 도전</span>
+    </figcaption>
+  </main>
+</body>
+{% include "footer.html" %}
+
+</html>

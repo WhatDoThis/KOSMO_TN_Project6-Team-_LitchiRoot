@@ -1,0 +1,265 @@
+@font-face {
+    font-family: noto-black;
+    src: url(font/notosans/NotoSansKR-Black.otf);
+}
+@font-face {
+    font-family: noto-bold;
+    src: url(font/notosans/NotoSansKR-Bold.otf);
+}
+@font-face {
+    font-family: noto-light;
+    src: url(font/notosans/NotoSansKR-Light.otf);
+}
+@font-face {
+    font-family: noto-medium;
+    src: url(font/notosans/NotoSansKR-Medium.otf);
+}
+@font-face {
+    font-family: noto-regular;
+    src: url(font/notosans/NotoSansKR-Regular.otf);
+}
+@font-face {
+    font-family: noto-thin;
+    src: url(font/notosans/NotoSansKR-Thin.otf);
+}
+
+.nav-main {
+    position: fixed;
+    display: block;
+    top: 0;
+    width: 100%;
+    min-height: 170px;
+    background-color: #f6f5ef;
+    margin-bottom: 0;
+    z-index: 999;
+}
+
+.nav-header {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    height:120px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-header-heading {
+    float: left;
+    font-size: 10px;
+}
+
+.nav-header-heading a {
+    margin: auto;
+    padding: auto;
+    text-align: center;
+}
+
+.nav-image{
+    display: block;
+    padding-top: 15px;
+    width: 400px;
+    height: auto;
+    margin: auto;
+    min-width: 200px;
+}
+
+.nav-sign{
+    display: inline-block;
+    min-width: 400px;
+    padding: 0;
+    float: right;
+    text-align: right;
+}
+
+.nav-sign-list{
+    width:auto;
+    margin: auto;
+    vertical-align: middle;
+}
+
+.nav-sign button{
+    height:45px;
+    width:120px;
+    text-align: center;
+    border: none;
+    border-radius: 20px;
+    margin-right: 20px;
+    font-size: 1rem;
+    color: #F54927;
+    background-color: #F88b74;
+    margin-top: 0;
+    font-family: noto-bold;
+    cursor: pointer;
+}
+
+.nav-sign button:hover{
+    color: #fff;
+    background-color: #F54927;
+}
+
+.nav-menu{
+    display: flex;
+    width: auto;
+    height:45px;
+    justify-content: flex-end;
+    margin-right: 20px;
+    margin-bottom: 0;
+    padding-right: 20px;
+    align-items: end;
+}
+
+.nav-menu-item {
+    display: block;
+    float: left;
+    margin-left: 15px;
+    font-size: 12px;
+}
+
+.nav-menu-item a {
+    display: block;
+    padding: 10px 20px 15px;
+    width: auto;
+    font-size: 1rem;
+    font-weight: 300;
+    text-decoration: none;
+    font-family: noto-bold;
+    color: #502c19;
+}
+
+.nav-menu-item a:hover,
+.nav-menu-item a:focus {
+    text-decoration: none;
+    color: #fff;
+    background-color: #F88b74;
+}
+
+@media (max-width: 800px){
+    .nav-image{
+        width: 300px;
+    }
+    .nav-sign{
+        min-width: 80px;
+    }
+    .nav-sign button{
+        height:35px;
+        width:100px;
+        font-size: 1rem;
+    }
+    .nav-menu-item{
+        margin-left: 10px;
+    }
+    .nav-menu-item a {
+        font-size: 1rem;
+        padding: 8px 20px 8px;
+    }
+}
+
+@media (max-width: 700px){
+    .nav-image{
+        width: 300px;
+    }
+    .nav-sign{
+        min-width: 80px;
+    }
+    .nav-sign button{
+        height:35px;
+        width:100px;
+        font-size: 0.8rem;
+    }
+    .nav-menu-item{
+        margin-left: 10px;
+    }
+    .nav-menu-item a {
+        font-size: 0.9rem;
+        padding: 8px 20px 8px;
+    }
+}
+
+
+@media (max-width: 650px){
+    .nav-sign button{
+        height:35px;
+        width:80px;
+        margin-right: 10px;
+        font-size: 0.7rem;
+    }
+    .nav-menu {
+        margin-right: 10px;
+        padding-right: 10px;
+        padding-left: 30px;
+    }
+    .nav-menu-item{
+        margin-left: 5px;
+    }
+    .nav-menu-item a {
+        font-size: 0.8rem;
+        padding: 5px 10px 5px;
+    }
+}
+
+@media (max-width: 550px){
+    .nav-image{
+        width: 250px;
+    }
+    .nav-sign{
+        min-width: 60px;
+    }
+    .nav-sign button{
+        display: block;
+        margin-top: 5px;
+    }
+    .nav-menu {
+        margin-right: 5px;
+        padding-right: 5px;
+        padding-left: 20px;
+    }
+    .nav-menu-item a {
+        font-size: 0.78rem;
+        padding: 5px 5px 5px;
+    }
+}
+
+@media (max-width: 500px){
+    .nav-image{
+        width: 250px;
+    }
+    .nav-sign{
+        min-width: 60px;
+    }
+    .nav-sign button{
+        display: block;
+        margin-top: 5px;
+    }
+    .nav-menu {
+        margin-right: 5px;
+        padding-right: 5px;
+        padding-left: 20px;
+    }
+    .nav-menu-item a {
+        font-size: 0.75rem;
+        padding: 5px 5px 5px;
+    }
+}
+
+@media (max-width: 450px){
+    .nav-image{
+        width: 250px;
+    }
+    .nav-sign{
+        min-width: 60px;
+    }
+    .nav-sign button{
+        display: block;
+        margin-top: 5px;
+    }
+    .nav-menu {
+        margin-right: 5px;
+        padding-right: 5px;
+        padding-left: 20px;
+    }
+    .nav-menu-item a {
+        font-size: 0.7rem;
+        padding: 5px 5px 5px;
+    }
+}

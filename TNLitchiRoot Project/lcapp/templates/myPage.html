@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tropical Night Litchi-Root</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/apply_ask_myPage.css'%}" />
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+    </style>
+    <script>
+		function check(id){
+			var fileVal = document.getElementById("upload"+id).value;
+			if(fileVal.length == 0){
+				alert("이력서를 첨부해 주세요");
+				return false;
+			}
+			if(confirm("다시제출하시겠습니까?")){
+			    $("#f"+id).submit();
+            }
+		}
+        function apply_delete(selectedRecruitment){
+			if(confirm("지원취소하시겠습니까?")){
+				location.href="/apply_delete/"+selectedRecruitment;
+			}
+		}
+	</script>
+</head>
+<body style="margin:0">
+    {% include "nav.html" %}
+        <div class="main">
+			<div class="myPage-title">
+				<p>지원목록</p></br>
+				<span>공정한 평가와 열린 채용, 전형별 채용 과정을 확인하세요.</span>
+			</div>
+            <ul class="jobs_list nrw" id="ulJobList">
+                {% if myApplicationes|length == 0%}
+                <span>지원한 공고가 존재하지 않습니다.</span>
+                {% endif %}
+                {% for myApplication in myApplicationes%}
+                    {% with recruitment=myApplication.ap_recruitment%}
+                    {% with affiliate=myApplication.ap_recruitment.re_affiliate %}
+                        <li class="jobs_item_li">
+                            <div class="jobs_item">
+                                <div class="jobs_item_top">
+                                    <a href="/apply/{{affiliate.id}}/{{recruitment.id}}"  class="dmyHref a_style" title="공고 상세 내용 보러가기">
+                                        <strong class="tit">                         
+                                            <span class="fc_red co">{{affiliate.co_affiliate}}</span>                         
+                                            <span>{{recruitment.re_sector}}</span>                     
+                                        </strong>                     
+                                        <div class="flex_box flex_align_cnt info_box">                         
+                                            <span class="info">{{recruitment.re_career}}</span>
+                                        </div>                     
+                                        <div class="efw400 flex_box flex_align_cnt info_box">                         
+                                            <span class="dday">D-{{myApplication.dDay}}</span>                         
+                                            <span class="date">{{recruitment.re_sdate|date:'Y.m.d'}} ~ {{recruitment.re_edate|date:'Y.m.d'}}</span>                     
+                                        </div>                 
+                                    </a>
+                                    <form id="f{{recruitment.id}}" action="../apply_ok/" method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <div class="input-file">
+                                                <input type="text" readonly="readonly" class="file-name" />
+                                                <label for="upload{{recruitment.id}}" class="file-label">파일 업로드</label>
+                                                <input type="file" name="resume" id="upload{{recruitment.id}}" class="file-upload" />
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="ap_recruitment_id" value="{{recruitment.id}}"/>
+                                        <input type="hidden" name="url" value="myPage"/>
+                                        <input type="button"class="select-wrapper-button" value="다시 제출하기" onclick="check({{recruitment.id}})"/>
+                                        <button type="button" class="select-wrapper-button" onclick="location.href='../../download?path={{ myApplication.ap_resume }}' ">지원했던 파일 다운 받기</button>
+                                        <input type="button" class="select-wrapper-button" onclick="javascript:apply_delete({{recruitment.id}})" value="취소"/>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                    {% endwith %}
+                    {% endwith %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% include "footer.html" %}
+</body>
+<script>
+    (function($){
+		var $fileBox = null;
+		$(function() {
+		  init();
+		})
+		function init() {
+		  $fileBox = $('.input-file');
+		  fileLoad();
+		}
+		function fileLoad() {
+		  $.each($fileBox, function(idx){
+			var $this = $fileBox.eq(idx),
+				$btnUpload = $this.find('[type="file"]'),
+				$label = $this.find('.file-label');	
+			$btnUpload.on('change', function() {
+			  var $target = $(this),
+				  fileName = $target.val(),
+				  $fileText = $target.siblings('.file-name');
+			  $fileText.val(fileName);
+			})
+			$btnUpload.on('focusin focusout', function(e) {
+			  e.type == 'focusin' ?
+				$label.addClass('file-focus') : $label.removeClass('file-focus');
+			})
+		  })
+		}
+	  })(jQuery);
+</script>
+</html>

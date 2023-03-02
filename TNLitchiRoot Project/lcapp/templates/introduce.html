@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/etc.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="{% static '/js/trim.js'%}"></script>
+    <title>Tropical Night Introduce</title>
+</head>
+<!-- Contents -->
+{% include "nav.html" %}
+<body style="margin:0">
+    <div class="introduce-wrap">
+        <div class="introduce-image">
+            <div>    
+                <strong class="introduce-text1">LITCHI ROOT<br></strong>
+                <br>
+                <strong class="introduce-text2">
+                    리치루트는 뛰어난 인재와 기술을 바탕으로 최고의 제품과 서비스를 창출하여<br>
+                    인류 사회에 공헌하는 것을 궁극적인 목표로 삼고 있습니다.<br>
+                    글로벌 No.1 IT기업으로 끊임없는 혁신을 통해 전 세계인이<br>
+                    더욱 행복하고 건강한 삶을 누리는 데 도움이 될 기술을 발전시켜 나갈 것입니다.
+                    <br><br><br><br><br>
+                    지속 가능한 내일을 만들며 꿈을 키워가는 회사, LITCHI ROOT<br>
+                </strong>
+            </div>
+        </div>
+        <div class="introduce-history">
+            <br><br><br>
+            <h1>TN COMPANY 연혁</h1><br>
+            <div>
+                <h2>2022.12 파일 애플 런칭</h2>
+                <ol class="introduce-history">
+                    <li><img src="{% static 'css/imgs/fileapple.png'%}"></li><hr>
+                </ol>
+                <h2>2023.01 파파야 마켓 런칭</h2>
+                <ol class="introduce-history">    
+                    <li><img src="{% static 'css/imgs/papaya.png'%}"></li><hr>
+                </ol>
+                <h2>2023.02~ 리치 루트 런칭</h2>
+                <ol class="introduce-history">    
+                    <li><img src="{% static 'css/imgs/litchi_root.png'%}"></li><hr>
+                </ol>
+            </div>
+        </div>
+    </div>
+</body>
+{% include "footer.html" %}
+</html>

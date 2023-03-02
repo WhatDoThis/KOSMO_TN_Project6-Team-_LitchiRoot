@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/subsidiary.css' %}">
+    <title>Tropical Night Subsidiary</title>
+</head>
+<!-- Contents -->
+{% include "nav.html" %}
+<body style="margin:0">
+    <div class="subcom-main">
+        <strong>Tropical Night</strong>
+        <div class="companyGroup">
+            <h3 class="categoryTitle">계열사 소개</h3>
+            <ul class="companyList">
+                <li class="subcom-list-item">
+                    <a href="http://192.168.0.13:8000/bang/League_of_Legends/home">
+                        <p>Bang SOFT</p>
+                        <div style="width:100%">
+                            <img src="{% static 'css/imgs/Bang SOFT.png'%}">
+                        </div>
+                    </a>
+                </li>
+                <li class="subcom-list-item">
+                    <a href="http://192.168.0.69:8000/YourClass">
+                        <p>IDLE</p>
+                        <div style="width:100%">
+                            <img src="{% static 'css/imgs/IDLE.png'%}">
+                        </div>
+                    </a>
+                </li>
+                <li class="subcom-list-item">
+                    <a href="http://192.168.0.10:8000">
+                        <p>Tuna Salad</p>
+                        <div style="width:100%">
+                            <img src="{% static 'css/imgs/Tuna Salad.png'%}">
+                        </div>
+                    </a>
+                </li>
+                <li class="subcom-list-item">
+                    <a href="http://192.168.0.249:8000/libflixapp">
+                        <p>Fantastic 4</p>
+                        <div style="width:100%">
+                            <img src="{% static 'css/imgs/Fantastic 4.png'%}">
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% include "footer.html" %}
+</body>
+</html>

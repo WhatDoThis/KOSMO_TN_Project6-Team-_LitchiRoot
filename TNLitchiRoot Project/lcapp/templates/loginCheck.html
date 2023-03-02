@@ -1,0 +1,6 @@
+{% if not request.session.email %}
+    <script language="javascript">
+        alert("로그인이 필요한 서비스입니다");
+        history.back();
+    </script>
+{% endif %}

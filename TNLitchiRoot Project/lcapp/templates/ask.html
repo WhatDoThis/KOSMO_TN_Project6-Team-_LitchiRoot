@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Tropical Night Litchi-Root</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/apply_ask_myPage.css'%}" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src=""></script> 로그인 js 넣기-->
+    <style>
+   
+
+    </style>
+    <script>
+		function check(){
+			var companyVal = f.company.value;
+			if(companyVal.length == 0){
+				alert("회사를 선택해 주세요.");
+				return false;
+			}
+			var recruitmentVal = f.recruitment.value;
+			if(recruitmentVal.length == 0){
+				alert("직종을 선택해 주세요.");
+				return false;
+			}
+			var titleVal = f.title.value;
+			if(titleVal.length == 0){
+				alert("제목을 입력해 주세요.");
+				return false;
+			}
+			varcontextVal = f.context.value;
+			if(varcontextVal.length == 0){
+				alert("내용을 입력해 주세요.");
+				return false;
+			}
+			if(confirm("문의하시겠습니까? 문의한 내용과 답변은 로그인한 이메일로 전송됩니다.")){
+				f.submit();
+			}
+		}
+    </script>
+</head>
+
+<body style="margin:0">
+    {% include "nav.html" %}
+	<div class="main">
+		<div class="ask-title">
+            <p>1:1문의</p>
+			<span>답변 및 처리 과정은 이메일로 확인 할 수 있습니다.</span>
+        </div>
+		<div class="selected-items">
+			<div class="select-wrapper-company">
+				<div class="select-company">
+					<div class="select__trigger-company"><span>회사</span>
+						<div class="arrow"></div>
+					</div>
+					<div class="custom-options-company">
+						<span class="custom-option-company selected mustDelete" data-value="">회사</span>
+						{% for company in companies%}
+								<span class="custom-option-company" data-value="{{company.id}}">{{company.co_affiliate}}</span>
+							
+						{% endfor%}
+						<span class="custom-option-company" data-value="0">기타</span>
+					</div>
+				</div>
+			</div>
+			<div class="select-wrapper-recruitment">
+				<div class="select-recruitment">
+					<div class="select__trigger-recruitment"><span>직종</span>
+						<div class="arrow"></div>
+					</div>
+					<div class="custom-options-recruitment">
+						{% for recruitment in recruitmentes%}
+							{% if recruitment.id == selectedRecruitment%}
+								<span class="custom-option-recruitment selected" data-value="{{recruitment.id}}">{{recruitment.re_sector}}</span>
+							{% else %}
+								<span class="custom-option-recruitment" data-value="{{recruitment.id}}">{{recruitment.re_sector}}</span>
+							{% endif%}
+						{% endfor%}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="select-wrapper-content">
+			<form name="f" action="ask_ok" method="post" enctype="multipart/form-data">
+				{% csrf_token %}
+				<input type="hidden" name="company" id="company" value="">
+				<input type="hidden" name="recruitment" id="recruitment" value="">
+				<input type="text" name="title" class="input-title" placeholder="제목입력"></br></br>
+				<textarea name="context" class="input-context" placeholder="내용입력&#13;&#10;답변 및 처리 과정은 이메일로 확인 할 수 있습니다."></textarea></br></br>
+				<input type="button" class="select-wrapper-button" value="문의하기" onclick="check()"/>
+			</from>
+		</div>
+	</div>
+	{% include "footer.html" %}
+</body>
+<script>
+	$(document).click(function (e){
+		if ($(e.target).hasClass("select__trigger-company")){
+			document.querySelector('.select-recruitment').classList.remove('open');
+			$('.select-company').toggleClass('open');
+		}else if($(e.target).hasClass("select__trigger-recruitment")){
+			if($(".custom-options-recruitment").children().length == 0){
+				alert("회사 먼저 선택해 주세요.");
+				return false;
+			}
+			document.querySelector('.select-company').classList.remove('open');
+			$('.select-recruitment').toggleClass('open');
+		}else{
+			document.querySelector('.select-company').classList.remove('open');
+			document.querySelector('.select-recruitment').classList.remove('open');
+		}
+	})
+	for (const option of document.querySelectorAll(".custom-option-company")) {
+		option.addEventListener('click', function() {
+			if (!this.classList.contains('selected')) {
+				this.parentNode.querySelector('.custom-option-company.selected').classList.remove('selected');
+				this.classList.add('selected');
+				document.querySelector('.mustDelete').remove();
+				document.getElementById('company').value=this.textContent;
+				this.closest('.select-company').querySelector('.select__trigger-company span').textContent = this.textContent;
+				let spanNode = document.createElement("span");
+				spanNode.className="custom-option-recruitment selected";
+				spanNode.textContent="직종";
+				document.querySelector('.custom-options-recruitment').appendChild(spanNode);
+				if(this.getAttribute("data-value")==0){
+					const boxes = document.querySelectorAll('.custom-option-recruitment');
+					boxes.forEach(box => {
+						box.remove();
+					});
+					let list = ['로그인오류 관련', '보안차단 관련', '기타'];
+					console.log(list[0])
+					for (var i=0; i<list.length; i++){
+						let spanNode = document.createElement("span");
+						spanNode.className="custom-option-recruitment";
+						spanNode.textContent=list[i];
+						document.querySelector('.custom-options-recruitment').appendChild(spanNode);
+					};
+					document.querySelector('.select__trigger-recruitment span').textContent="직종";
+					recruitmentRefresh();
+				}else{
+					$.ajax({
+						type:'GET',
+						url:'/selectCompany/'+this.getAttribute("data-value"),
+						success:function(json){
+							console.log(document.querySelector('.custom-option-recruitment'));
+							const boxes = document.querySelectorAll('.custom-option-recruitment');
+							boxes.forEach(box => {
+								box.remove();
+							});
+							json_data = JSON.parse(json)
+							for (var i=0; i<json_data.length; i++){
+								let spanNode = document.createElement("span");
+								spanNode.className="custom-option-recruitment";
+								spanNode.textContent=json_data[i].fields.re_sector;
+								spanNode.setAttribute("data-value", json_data[i].pk);
+								document.querySelector('.custom-options-recruitment').appendChild(spanNode);
+							};
+							document.querySelector('.select__trigger-recruitment span').textContent="직종";
+							recruitmentRefresh()
+						},
+						error : function(xhr,errmsg,err) {
+							console.log(xhr.status + ": " + xhr.responseText); 
+						}
+					});
+				}
+			}
+		})
+	}
+
+	if(document.querySelector('.custom-option-recruitment.selected') != null){
+		document.querySelector('.select__trigger-recruitment span').textContent = document.querySelector('.custom-option-recruitment.selected').textContent;
+	};
+	function recruitmentRefresh(){
+		for (const option of document.querySelectorAll(".custom-option-recruitment")) {
+			option.addEventListener('click', function() {
+				if (!this.classList.contains('selected')) {
+					if(this.parentNode.querySelector('.custom-option-recruitment.selected') != null){
+						this.parentNode.querySelector('.custom-option-recruitment.selected').classList.remove('selected');
+					};
+					this.classList.add('selected');
+					document.getElementById('recruitment').value=this.textContent;
+					this.closest('.select-recruitment').querySelector('.select__trigger-recruitment span').textContent = this.textContent;
+				}
+			})
+		}
+	}
+	recruitmentRefresh()
+</script>
+</html>

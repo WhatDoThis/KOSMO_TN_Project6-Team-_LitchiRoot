@@ -1,0 +1,398 @@
+@font-face {
+    font-family: noto-black;
+    src: url(font/notosans/NotoSansKR-Black.otf);
+}
+@font-face {
+    font-family: noto-bold;
+    src: url(font/notosans/NotoSansKR-Bold.otf);
+}
+@font-face {
+    font-family: noto-light;
+    src: url(font/notosans/NotoSansKR-Light.otf);
+}
+@font-face {
+    font-family: noto-medium;
+    src: url(font/notosans/NotoSansKR-Medium.otf);
+}
+@font-face {
+    font-family: noto-regular;
+    src: url(font/notosans/NotoSansKR-Regular.otf);
+}
+@font-face {
+    font-family: noto-thin;
+    src: url(font/notosans/NotoSansKR-Thin.otf);
+}
+
+.collapse:not(.show) {
+    display: none;
+}
+
+.collapsing {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.35s ease;
+}
+  
+@media (prefers-reduced-motion: reduce) {
+    .collapsing {
+        transition: none;
+    }
+}
+.collapsing.collapse-horizontal {
+    width: 0;
+    height: auto;
+    transition: width 0.35s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+    .collapsing.collapse-horizontal {
+        transition: none;
+    }
+}
+
+
+.list-main{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin:0;
+}
+
+.list-title{
+    position: static;
+    display: inline-block;
+    height: 1000px;
+    width: 100%;
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(imgs/office.jpg);
+    background-size: cover;
+}
+
+.list-title p{
+	position: absolute;
+    text-align: left;
+    vertical-align: middle;
+    padding: 0 0 15px;
+    top: 70%;
+    left: 7%;
+    width: 380px;
+    color: #ffffff;
+    font-size: 70px;
+    font-family: noto-medium;
+}
+.list-title span {
+	position: absolute;
+    text-align: left;
+    vertical-align: middle;
+    padding: 10px 0 15px;
+    top: 86%;
+    left: 5%;
+    width: 900px;
+    color: #ffffff;
+    font-size: 30px;
+    font-family: noto-medium;
+}
+
+.list-main .col-lt{
+    width: 25.25%;
+    padding-left: 20px;
+}
+
+.list-main .col-lt span{
+    display: block;
+    margin-top: 30px;
+    margin-left: 30px;
+    font-size: 20px;
+    color: #F54927;
+    text-align: center;
+    border: 0;
+    font-family: noto-bold;
+    overflow-anchor: none;
+}
+
+.list-main .col-rt{
+    width: 71.5%;
+}
+  
+.accordion{
+    position: static;
+    display: inline-block;
+    text-align: center;
+    list-style: none;
+    width: 100%;
+    padding: 0;
+    margin-top: 100px;
+    min-height: 800px;
+}
+
+.accordion-item {
+    display: inline-block;
+    width: 100%;
+    padding: 0;
+    text-align: center;
+}
+
+.accordion-header {
+    width: 90%;
+    padding-bottom: 10px;
+    margin: 0;
+}
+
+.accordion-button {
+    display: flex;
+    width:100%;
+    align-items: center;
+    cursor: pointer;
+    padding: 1rem 2rem;
+    font-size: 20px;
+    color: #FAEAD1;
+    text-align: center;
+    background-color: #f88b74;
+    border: 0;
+    border-radius: 10px;
+    overflow-anchor: none;
+    font-family: noto-bold;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, border-radius 0.15s ease;
+}
+
+.code-head-strong{
+    width: 330px;
+}
+
+.code-head-div{
+    margin: auto;
+}
+.code-head-span{
+    width: 60px;
+    text-align: right;
+}
+
+.accordion-body{
+    width:90%;
+    text-align: center;
+    padding: 1rem 1.25rem;
+    margin: auto;
+    font-family: noto-medium;
+}
+
+.accordion-body strong{
+    font-weight: bolder;
+}
+
+.accordion-body code{
+    font-family: noto-medium;
+    font-size: 0.925em;
+    color: #d63384;
+    font-weight: bold;
+    word-wrap: break-word;
+}
+
+.accordion-item2 {
+    display: flex;
+    width: 100%;
+    padding: 0;
+    justify-content: center;
+}
+
+.accordion-item2 .no-re{
+    display: block;
+    width: 80%;
+    height: 15rem;
+    padding: 1rem 2rem;
+    vertical-align: middle;
+    background-color: #f88b74;
+    border-radius: 10px;
+    text-shadow: -0.8px 0 #F54927, 0 0.8px #F54927, 0.8px 0 #F54927, 0 -0.8px #F54927;
+}
+
+.accordion-item2 .no-re span{
+    display: block;
+    font-size: 60px;
+    color: #FAEAD1;
+    line-height: 15rem;
+    text-align: center;
+    border: 0;
+    font-family: noto-bold;
+    overflow-anchor: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .accordion-button {
+        transition: none;
+    }
+}
+.accordion-button:not(.collapsed) {
+    color: #FAEAD1;
+    background-color: #F54927;
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.125);
+}
+
+.accordion-button:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    transform: rotate(180deg);
+}
+.accordion-button::after {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-left: 2%;
+    content: "";
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23212529'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-size: 1.25rem;
+    transition: transform 0.2s ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+.accordion-button::after {
+    transition: none;
+}
+}
+.accordion-button:hover {
+z-index: 2;
+}
+.accordion-button:focus {
+z-index: 3;
+font-weight: bolder;
+font-family: noto-black;
+word-wrap: break-word;
+outline: 0;
+box-shadow: 0 0 0 0.15rem #F54927;
+}
+
+
+.accordion-body button{
+background: #FAEAD1;
+border: none;
+color: #F54927;
+padding: 10px 15px;
+border-radius: 20px;
+outline: none;
+cursor: pointer;
+transition: all .4s;
+font-size: 15px;
+font-weight: bold;
+}
+
+.accordion-body button:hover{
+color: #FAEAD1;
+background-color: #F54927;
+}
+  
+
+@media (max-width:1200px) {
+    .list-title p{
+		font-size: 50px;
+		top: 78%;
+		width: 300px;
+    }
+	.list-title span {
+		font-size: 20px;
+		top: 90%;
+		width: 600px;
+	}
+
+    .list-main .col-lt span{
+        font-size: 15px;
+    }
+    .code-head-strong {
+        width: 250px;
+    }
+    .accordion-button{
+        font-size: 15px;
+    }
+    .accordion-body{
+        font-size: 15px;
+    }
+}
+@media (max-width:1080px) {
+    .accordion-item2 .no-re span {
+        font-size: 55px;
+    }
+}
+@media (max-width:1000px) {
+    .accordion-button {
+        font-size: 12px;
+        width: 90%;
+        margin-left: 30px;
+    }
+    .accordion-body{
+        font-size: 12px;
+        width: 90%;
+        margin-left: 20px;
+    }
+    .accordion-item2 .no-re span {
+        font-size: 50px;
+    }
+}
+
+@media (max-width:900px) {
+    .list-title{
+        height: 700px;
+    }
+    .list-title p{
+		font-size: 40px;
+		top: 60%;
+		width: 270px;
+    }
+    .list-title span {
+        display: none;
+    }
+    .list-main .col-lt{
+        width: 100%;
+        height: 350px;
+        padding: 0;
+    }
+    .list-main .col-lt span{
+        margin-top: 15px;
+        font-size: 15px;
+    }
+    .list-main .col-rt{
+        width: 100%;
+    }
+    .accordion{
+        margin-top: 30px;
+    }
+    .accordion-button {
+        font-size: 12px;
+    }
+    .accordion-body{
+        font-size: 12px;
+    }
+    .accordion-body button{
+        font-size: 12px;
+    }
+    .code-head-strong{
+        width: 270px;
+    }
+}
+
+@media (max-width:700px) {
+    .code-head-strong{
+        width: 170px;
+    }
+}
+
+@media (max-width:550px) {
+    .list-title p{
+        font-size: 20px;
+        top:67%;
+        width: 200px;
+    }
+    .code-head-strong{
+        width: 140px;
+    }.code-head-span{
+        width: 30px;
+    }
+    .accordion-button{
+        width: 100%;
+        font-size: 8px;
+        padding: 1rem 0.8rem;
+        margin: 0;
+    }
+    .accordion-body{
+        font-size: 8px;
+        margin: 0;
+    }
+    .accordion-body button{
+        font-size: 8px;
+    }
+}

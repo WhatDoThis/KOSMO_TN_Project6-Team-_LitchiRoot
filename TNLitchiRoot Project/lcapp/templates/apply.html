@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/apply_ask_myPage.css'%}" />
+    <title>Tropical Night Litchi-Root</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<style>
+	</style>
+	<script>
+		function check(){
+			var fileVal = f.resume.value;
+			if(fileVal.length == 0){
+				alert("이력서를 첨부해 주세요");
+				return false;
+			}
+			if(confirm("지원하시겠습니까?")){
+				f.submit();
+			}
+		}
+		function apply_delete(selectedRecruitment){
+			if(confirm("지원취소하시겠습니까?")){
+				location.href="/apply_delete/"+selectedRecruitment;
+			}
+		}
+	</script>
+</head>
+{% include "nav.html" %}
+<body style="margin:0">
+	<div class="main">
+		<div class="apply-title">
+            <p>입사지원</p></br>
+			<span>더 행복한 세상을 만들어 갈 TN의 여정에 함께 할 동료를 찾습니다.</span>
+        </div>
+		<div class="selected-items">
+			<div class="selected-items select-wrapper-company">
+				<div class="select-company">
+					<div class="select__trigger-company"><span>회사</span>
+						<div class="arrow"></div>
+					</div>
+					<div class="custom-options-company">
+						{% if  selectedRecruitment == 0 and selectedCompany == 0%}
+								<span class="custom-option-company selected" data-value="0">회사</span>
+						{% endif %}
+						{% for company in companies%}
+							{% if company.id == selectedCompany%}
+								<span class="custom-option-company selected" data-value="{{company.id}}">{{company.co_affiliate}}</span>
+							{% else %}
+								<span class="custom-option-company" data-value="{{company.id}}">{{company.co_affiliate}}</span>
+							{% endif%}
+						{% endfor%}
+					</div>
+				</div>
+			</div>
+			<div class="selected-items select-wrapper-recruitment">
+				<div class="select-recruitment">
+					<div class="select__trigger-recruitment"><span>직무</span>
+						<div class="arrow"></div>
+					</div>
+					<div class="custom-options-recruitment">
+						{% if  selectedRecruitment == 0 and selectedCompany == 0%}
+								<span class="custom-option-recruitment selected" data-value="0">직무</span>
+						{% endif %}
+						{% for recruitment in recruitmentes%}
+							{% if recruitment.id == selectedRecruitment%}
+								<span class="custom-option-recruitment selected" data-value="{{recruitment.id}}">{{recruitment.re_sector}}</span>
+							{% else %}
+								<span class="custom-option-recruitment" data-value="{{recruitment.id}}">{{recruitment.re_sector}}</span>
+							{% endif%}
+						{% endfor%}
+					</div>
+				</div>
+			</div>
+		</div>
+		{% if  selectedRecruitment != 0 or selectedCompany != 0%}
+			<div class="select-wrapper-content">
+				<strong>{{recruitmentDetail.re_career}}</strong></br></br>
+				<code>{{recruitmentDetail.re_prefer}}</code></br></br>
+				{{recruitmentDetail.re_sdate|date:'Y.m.d'}} ~ {{recruitmentDetail.re_edate|date:'Y.m.d'}} 
+				<span style="color:red">D-{{recruitmentDetail.dDay}}</span></br></br>
+				<form name="f" action="../../apply_ok/" method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="mb-3">
+						<div class="input-file">
+							<input type="text" readonly="readonly" class="file-name" placeholder="doc 파일만 첨부 가능"/>
+							<label for="upload01" class="file-label">파일 업로드</label>
+							<input type="file" name="resume" id="upload01" class="file-upload" accept=".doc"/>
+						</div>
+					</div>
+					<input type="hidden" name="ap_recruitment_id" value="{{selectedRecruitment}}"/>
+					<input type="hidden" name="url" value="apply"/>
+					<button type="button" class="select-wrapper-button" onclick="location.href='../../download?path=file/resume_Bomi.doc '">지원서 양식 다운받기</button></br></br>
+					{% if applyDetail.ap_resume == none%}
+						<input type="button" class="select-wrapper-button" value="지원하기" onclick="check()"/>
+					{% else%}
+						<button type="button" class="select-wrapper-button" onclick="location.href='../../download?path={{ applyDetail.ap_resume }}' ">지원했던 파일 다운 받기</button></br></br>
+						<input type="button"class="select-wrapper-button" value="다시 제출하기" onclick="check()"/>
+						<input type="button" class="select-wrapper-button" onclick="javascript:apply_delete({{selectedRecruitment}})" value="취소"/>
+					{% endif%}
+				</from>
+			</div>
+		{% else %}
+			<div class="select-wrapper-content">
+				<strong>회사 또는 직무를 선택해 주세요.</strong></br></br>
+			</div>
+		{% endif %}
+	</div>
+</body>
+{% include "footer.html" %}
+</html>
+<script>
+	document.querySelector('.select__trigger-company span').textContent = document.querySelector('.custom-option-company.selected').textContent;
+	$(document).click(function (e){
+		if ($(e.target).hasClass("select__trigger-company")){
+			document.querySelector('.select-recruitment').classList.remove('open');
+			$('.select-company').toggleClass('open');
+		}else if($(e.target).hasClass("select__trigger-recruitment")){
+			document.querySelector('.select-company').classList.remove('open');
+			$('.select-recruitment').toggleClass('open');
+		}else{
+			document.querySelector('.select-company').classList.remove('open');
+			document.querySelector('.select-recruitment').classList.remove('open');
+		}
+	})
+	for (const option of document.querySelectorAll(".custom-option-company")) {
+		option.addEventListener('click', function() {
+			if (!this.classList.contains('selected')) {
+				this.parentNode.querySelector('.custom-option-company.selected').classList.remove('selected');
+				console.log(this.getAttribute("data-value"));
+				this.classList.add('selected');
+				this.closest('.select-company').querySelector('.select__trigger-company span').textContent = this.textContent;
+				location.href="../../apply/"+this.getAttribute("data-value")+"/0";
+
+			}
+		})
+	}
+	
+	if(document.querySelector('.custom-option-recruitment.selected') != null){
+		document.querySelector('.select__trigger-recruitment span').textContent = document.querySelector('.custom-option-recruitment.selected').textContent;
+	};
+	for (const option of document.querySelectorAll(".custom-option-recruitment")) {
+		option.addEventListener('click', function() {
+			if (!this.classList.contains('selected')) {
+				if(this.parentNode.querySelector('.custom-option-recruitment.selected') != null){
+					this.parentNode.querySelector('.custom-option-recruitment.selected').classList.remove('selected');
+				};
+				this.classList.add('selected');
+				this.closest('.select-recruitment').querySelector('.select__trigger-recruitment span').textContent = this.textContent;
+				location.href="../../apply/"+"0/"+this.getAttribute("data-value");
+			}
+		})
+	}
+	(function($){
+		var $fileBox = null;
+		$(function() {
+		  init();
+		})
+		function init() {
+		  $fileBox = $('.input-file');
+		  fileLoad();
+		}
+		function fileLoad() {
+		  $.each($fileBox, function(idx){
+			var $this = $fileBox.eq(idx),
+				$btnUpload = $this.find('[type="file"]'),
+				$label = $this.find('.file-label');	
+			$btnUpload.on('change', function() {
+			  var $target = $(this),
+				  fileName = $target.val(),
+				  $fileText = $target.siblings('.file-name');
+			  $fileText.val(fileName);
+			})
+			$btnUpload.on('focusin focusout', function(e) {
+			  e.type == 'focusin' ?
+				$label.addClass('file-focus') : $label.removeClass('file-focus');
+			})
+		  })
+		}
+	  })(jQuery);
+</script>
