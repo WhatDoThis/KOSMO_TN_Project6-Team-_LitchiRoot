@@ -132,10 +132,11 @@
 	font-family: noto-regular;
 }
 .select-wrapper-button{
-	background-color: #F88b74;
+	background-color: #f88b74;
 	border: none;
-	color: #F54927;
+	color: #fff;
 	padding: 10px 15px;
+	margin-bottom: 5px;
 	border-radius: 20px;
 	outline: none;
 	cursor: pointer;
@@ -232,6 +233,7 @@
 	border:none;
 	background-color: #f88b74;
 }
+
 .arrow {
 	position: relative;
 	height: 15px;
@@ -361,6 +363,10 @@
 	text-align: center;
 	cursor: pointer;
 	font-family: noto-regular;
+}
+.input-file .file-label:hover{
+	color: #fff;
+    background-color: #F54927;
 }
 .input-file .file-name {
 	width: 40%;
