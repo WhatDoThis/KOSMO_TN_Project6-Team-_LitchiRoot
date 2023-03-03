@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/apply_ask_myPage.css'%}" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static '\js\trim.js' %}"></script>
     <!-- <script src=""></script> 로그인 js 넣기-->
     <style>
    
@@ -25,13 +26,19 @@
 				return false;
 			}
 			var titleVal = f.title.value;
+			titleVal = trim(titleVal);
 			if(titleVal.length == 0){
 				alert("제목을 입력해 주세요.");
+				f.title.value = "";
+				f.title.focus();
 				return false;
 			}
-			varcontextVal = f.context.value;
-			if(varcontextVal.length == 0){
+			var contextVal = f.context.value;
+			contextVal = trim(contextVal);
+			if(contextVal.length == 0){
 				alert("내용을 입력해 주세요.");
+				f.context.value = "";
+				f.context.focus();
 				return false;
 			}
 			if(confirm("문의하시겠습니까? 문의한 내용과 답변은 로그인한 이메일로 전송됩니다.")){

@@ -40,5 +40,4 @@ urlpatterns = [
     path("ask/", views.ask, name='ask'),
     path("ask/ask_ok", views.ask_ok, name='ask_ok'),
     path("selectCompany/<int:company>", views.selectCompany, name='selectCompany'),
-    path("sendEmail", views.sendEmail, name='sendEmail'),
 ]

@@ -61,9 +61,9 @@
                                         {% csrf_token %}
                                         <div class="mb-3">
                                             <div class="input-file">
-                                                <input type="text" readonly="readonly" class="file-name" />
+                                                <input type="text" readonly="readonly" class="file-name" placeholder="doc 파일만 첨부 가능"/>
                                                 <label for="upload{{recruitment.id}}" class="file-label">파일 업로드</label>
-                                                <input type="file" name="resume" id="upload{{recruitment.id}}" class="file-upload" />
+                                                <input type="file" name="resume" id="upload{{recruitment.id}}" class="file-upload" accept=".doc,.docx"/>
                                             </div>
                                         </div>
                                         <input type="hidden" name="ap_recruitment_id" value="{{recruitment.id}}"/>

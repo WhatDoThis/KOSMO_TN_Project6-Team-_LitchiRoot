@@ -22,18 +22,21 @@
     color: #ffffff;
     font-size: 70px;
     font-family: noto-medium;
+	cursor: default;
 }
 .apply-title span {
 	position: absolute;
     text-align: left;
     vertical-align: middle;
     padding: 10px 0 15px;
+	margin-top: 15px;
     top: 86%;
     left: 6%;
     width: 900px;
     color: #ffffff;
     font-size: 30px;
     font-family: noto-medium;
+	cursor: default;
 }
 
 .ask-title{
@@ -55,18 +58,21 @@
     color: #ffffff;
     font-size: 70px;
     font-family: noto-medium;
+	cursor: default;
 }
 .ask-title span {
 	position: absolute;
     text-align: left;
     vertical-align: middle;
     padding: 10px 0 15px;
+	margin-top: 15px;
     top: 86%;
     left: 6%;
     width: 900px;
     color: #ffffff;
     font-size: 30px;
     font-family: noto-medium;
+	cursor: default;
 }
 .myPage-title{
 	position: static;
@@ -87,18 +93,21 @@
     color: #ffffff;
     font-size: 70px;
     font-family: noto-medium;
+	cursor: default;
 }
 .myPage-title span {
 	position: absolute;
     text-align: left;
     vertical-align: middle;
     padding: 10px 0 15px;
+	margin-top: 15px;
     top: 86%;
     left: 5%;
     width: 900px;
     color: #ffffff;
     font-size: 30px;
     font-family: noto-medium;
+	cursor: default;
 }
 
 .selected-items{

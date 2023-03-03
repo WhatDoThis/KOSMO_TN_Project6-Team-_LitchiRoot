@@ -77,11 +77,13 @@
     color: #ffffff;
     font-size: 70px;
     font-family: noto-medium;
+    cursor: default;
 }
 .list-title span {
 	position: absolute;
     text-align: left;
     vertical-align: middle;
+    margin-top: 15px;
     padding: 10px 0 15px;
     top: 86%;
     left: 5%;
@@ -89,6 +91,7 @@
     color: #ffffff;
     font-size: 30px;
     font-family: noto-medium;
+    cursor: default;
 }
 
 .list-main .col-lt{
@@ -106,6 +109,7 @@
     border: 0;
     font-family: noto-bold;
     overflow-anchor: none;
+    cursor: default;
 }
 
 .list-main .col-rt{
@@ -171,10 +175,12 @@
     padding: 1rem 1.25rem;
     margin: auto;
     font-family: noto-medium;
+    cursor: default;
 }
 
 .accordion-body strong{
     font-weight: bolder;
+    cursor: default;
 }
 
 .accordion-body code{
@@ -183,6 +189,7 @@
     color: #d63384;
     font-weight: bold;
     word-wrap: break-word;
+    cursor: default;
 }
 
 .accordion-item2 {
@@ -322,6 +329,9 @@ background-color: #F54927;
     .accordion-item2 .no-re span {
         font-size: 50px;
     }
+    .accordion-item2 .no-re span{
+        font-size: 40px;
+    }
 }
 
 @media (max-width:900px) {
@@ -363,11 +373,17 @@ background-color: #F54927;
     .code-head-strong{
         width: 270px;
     }
+    .accordion-item2 .no-re span{
+        font-size: 30px;
+    }
 }
 
 @media (max-width:700px) {
     .code-head-strong{
         width: 170px;
+    }
+    .accordion-item2 .no-re span{
+        font-size: 20px;
     }
 }
 

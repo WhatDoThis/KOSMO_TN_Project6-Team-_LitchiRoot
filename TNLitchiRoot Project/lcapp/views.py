@@ -1,4 +1,4 @@
-import os, random
+import os
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib import messages
@@ -6,7 +6,6 @@ from django.db.models import Q
 from django.urls import reverse
 from django.utils import timezone
 from django.template import loader
-from django.core.paginator import Paginator
 from lcapp.models import Seeker, Company, Apply, Recruitment
 from django.conf import settings
 from datetime import datetime
@@ -47,7 +46,6 @@ def join_ok(request):
         phone = request.POST['phone']
         gender = request.POST['gender']
         cdate = timezone.now().strftime('%Y-%m-%d')
-        print(url, email, pwd, name, phone, gender, cdate)
         used_email = Seeker.objects.filter(Q(email=email))
         used_phone = Seeker.objects.filter(Q(phone=phone))
         if used_email:
@@ -89,7 +87,7 @@ def login_ok(request):
             return HttpResponse("<script>alert('"+ message +"');history.back();</script>")
     else:
         message = '알 수 없는 오류가 발행하였습니다.'
-        return HttpResponse("<script>alert('"+ message +"');history.back()</script>")
+        return HttpResponse("<script>alert('"+ message +"');history.back();</script>")
 
 def logout(request):
    if request.session['email']:
@@ -108,6 +106,7 @@ def list(request):
    sector_set = set()
    recruitments = Recruitment.objects.select_related('re_affiliate').order_by('re_edate')
    companies = Company.objects.all().values()
+   
    # 각 공고별 직무 리스트들을 set에 담아 중복을 제거하고 디데이 요소를 추가하여 넣어줌
    if recruitments:
       for recruitment in recruitments:
@@ -120,13 +119,14 @@ def list(request):
       'sector_set' : sector_set,
    }
    
-   # Search 를 통하여 POST 가 존재하게 되면 리스트를 검색한 내용에 맞게 새로 보여줌
+   # Search기능을 통하여 POST 가 존재하게 되면 리스트를 검색한 내용에 맞게 새로 보여주는 파트
    if request.method == 'POST':
       company_option = request.POST.get('company')
       sector_option = request.POST.get('sector')
       career_option = request.POST.get('career')
       
       # 검색 요소가 3개일 때 각 요소에 대한 필터내용을 유기적으로 연동될 수 있는 방법
+      #------------------------------------------------------------------------------------------------
       q = Q()
       if company_option != "primary":
          q &= Q(re_affiliate = company_option)
@@ -135,6 +135,9 @@ def list(request):
       if career_option != "primary":
          q &= Q(re_career__contains=career_option)
       recruitments = Recruitment.objects.select_related('re_affiliate').filter(q).order_by('re_edate')
+      #------------------------------------------------------------------------------------------------
+      
+      #sort한 요소들만 디데이 추가
       for recruitment in recruitments:
          recruitment.dDay = (recruitment.re_edate-datetime.now().date()).days
 
@@ -149,15 +152,13 @@ def list(request):
 
    return HttpResponse(templates.render(context, request))
 
-
+# 검색기능
 def search(request):
    if request.method == 'POST':
       ajax_data = request.POST['get_data']
-      # 받은 데이터 값이 숫자라면 (회사.id)이므로 해당 회사의 직무들을 찾아서 가져옴
-      if ajax_data.isdigit():
+      if ajax_data.isdigit(): # 받은 데이터 값이 숫자라면 (회사.id)이므로 해당 회사의 직무들을 찾아서 가져옴
          data_for_jasons = Recruitment.objects.select_related('re_affiliate').filter(Q(re_affiliate=ajax_data))
-      # 받은 데이터 값이 글자라면 (직무value)이므로 해당 직무를 가진 회사들을 찾아서 가져옴
-      else:
+      else: # 받은 데이터 값이 글자라면 (직무value)이므로 해당 직무를 가진 회사들을 찾아서 가져옴
          data_for_jasons = Recruitment.objects.select_related('re_affiliate').filter(Q(re_sector=ajax_data))
 
       # ajax로 보낼때 쿼리셋의 경우 직렬화가 필요함
@@ -165,7 +166,7 @@ def search(request):
       return JsonResponse(report_list, safe=False)
    else:
       message = '알 수 없는 오류가 발행하였습니다.'
-      return HttpResponse("<script>alert('"+ message +"');history.back()</script>")
+      return HttpResponse("<script>alert('"+ message +"');history.back();</script>")
     
 #입사지원 상세화면
 def apply(request, company, recruitment):
@@ -189,7 +190,7 @@ def apply(request, company, recruitment):
          'recruitmentes':recruitmentes,
          'selectedRecruitment' : selectedRecruitment,
       }
-   #회사를 선택하고나 또는 직종을 선택하고 들어온 경우
+   #회사를 선택하거나 또는 직종을 선택하고 들어온 경우
    else:
       #직종에 따라 회사를 찾아옴
       if selectedCompany == 0 and selectedRecruitment != 0:
@@ -232,29 +233,34 @@ def apply_ok(request):
       #--------------------
       selectedRecruitment = request.POST['ap_recruitment_id']
       resume = request.FILES["resume"]
+      fileExtension = os.path.splitext(str(resume))[-1].lower()
+      if fileExtension == '.doc' or fileExtension == '.docx':
       #세션에 있는 이메일로 선택된 직종에 지원된것이 있는지 확인
-      applyDetail = Apply.objects.filter(ap_seeker_id=sessionEmail, ap_recruitment=selectedRecruitment)
+         applyDetail = Apply.objects.filter(ap_seeker_id=sessionEmail, ap_recruitment=selectedRecruitment)
       #지원서가 존재한다면
-      if applyDetail:
-         #파일만 바꿔서 세이브
-         applyDetail[0].ap_resume=resume
-         applyDetail[0].save()
-      #지원서가 존재하지 않는다면 
+         if applyDetail:
+            #파일만 바꿔서 세이브
+            applyDetail[0].ap_resume=resume
+            applyDetail[0].save()
+         #지원서가 존재하지 않는다면 
+         else:
+            #지원서를 생성하여 세이브
+            apply = Apply(
+               ap_seeker_id=sessionEmail,
+               ap_recruitment_id=selectedRecruitment,
+               ap_resume=resume,
+            )
+            apply.save()
+         #마이페이지에서 저장하였다면 마이페이지로
       else:
-         #지원서를 생성하여 세이브
-         apply = Apply(
-            ap_seeker_id=sessionEmail,
-            ap_recruitment_id=selectedRecruitment,
-            ap_resume=resume,
-         )
-         apply.save()
-      #마이페이지에서 저장하였다면 마이페이지로
+         message = '이력서는 doc 또는 docx 파일로만 첨부가 가능합니다.'
+         return HttpResponse("<script>alert('"+ message +"');history.back();</script>")
       if url == 'myPage':
          return redirect('/myPage/')
       return redirect('../apply/0/'+selectedRecruitment)
    else:
       message = '알 수 없는 오류가 발행하였습니다.'
-      return HttpResponse("<script>alert('"+ message +"');history.back()</script>")
+      return HttpResponse("<script>alert('"+ message +"');history.back();</script>")
 
 def apply_delete(request, recruitment):
    try:
@@ -281,7 +287,6 @@ def apply_delete(request, recruitment):
 def fileDownload(request):
     #다운로드할 데이터를 불러옴
     path = request.GET['path']
-    print(path)
     file_path = os.path.join(settings.MEDIA_ROOT, path)
     #파일이 존재한다면 파일을 리턴
     if os.path.exists(file_path):
@@ -291,7 +296,7 @@ def fileDownload(request):
         return response
     else:
         message = '알 수 없는 오류가 발행하였습니다.'
-        return HttpResponse("<script>alert('"+ message +"');history.back()</script>")
+        return HttpResponse("<script>alert('"+ message +"');history.back();</script>")
 
 #지원한 목록
 def myPage(request):
@@ -305,10 +310,9 @@ def myPage(request):
    #----------------------------
    #세션에 등록된 아이디로 지원한 목록을 불러옴 apply로 recruitment을 엮고 이걸로 company를 엮음
    myApplicationes = Apply.objects.filter(ap_seeker_id=sessionEmail).select_related('ap_recruitment__re_affiliate')
-   print(myApplicationes.count)
    if not myApplicationes:
       message = '지원한 공고가 존재하지 않습니다.'
-      return HttpResponse("<script>alert('"+ message +"');history.back()</script>")
+      return HttpResponse("<script>alert('"+ message +"');history.back();</script>")
    #각 직종들의 마감일까지 dDay를 계산
    for myApplication in myApplicationes:
       myApplication.dDay = (myApplication.ap_recruitment.re_edate-datetime.now().date()).days
@@ -366,7 +370,7 @@ def info_ok(request):
       return HttpResponse("<script>alert('"+ message +"');location.href='/info';</script>")
    else:
       message = '알 수 없는 오류가 발행하였습니다.'
-      return HttpResponse("<script>alert('"+ message +"');history.back()'</script>")
+      return HttpResponse("<script>alert('"+ message +"');history.back();</script>")
     
 #1:1문의
 def ask(request):
@@ -379,7 +383,6 @@ def ask(request):
    #----------------------------
    request.session['url'] = request.path
    companies = Company.objects.all()
-   print(companies)
    context = {
       'companies' : companies,
    }
@@ -410,7 +413,7 @@ def ask_ok(request):
       email = EmailMessage(
          "리치루트 : 문의가 접수되었습니다. : "+title, #이메일 제목
          context, #내용
-         to=[sessionEmail], #받는 이메일 관리자 이메일
+         to=[sessionEmail], # 지원자 이메일
       )
       email.send()
       context = context+"\n\n이쪽으로 답신 부탁드립니다. : "+sessionEmail
@@ -425,16 +428,3 @@ def ask_ok(request):
    else:
       message = '알 수 없는 오류가 발행하였습니다.'
       return HttpResponse("<script>alert('"+ message +"');history.back();</script>")
-
-def sendEmail(request):
-    #----------------------------
-    sessionEmail = 'dqas1004t@naver.com'
-    #----------------------------
-    code=random.randint(1000,9999)
-    email = EmailMessage(
-        "", #이메일 제목
-        str(code), #내용
-        to=[sessionEmail], #받는 이메일
-    )
-    email.send()
-    return JsonResponse(str(code), safe=False)
